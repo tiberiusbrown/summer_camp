@@ -17,23 +17,28 @@ void update_counts()
 
 void frame_game()
 {
+    u8 ox = 20;
+
     for(u8 y = 0; y < 8; ++y)
+    {
+        u8[12]& row = marks[y];
         for(u8 x = 0; x < PUZZLE_W; ++x)
-            $draw_sprite(x * 7, y * 7, SPRITES, marks[y][x]);
-    $draw_filled_rect(0, 56, 56, 1, DARK_GRAY);
-    $draw_filled_rect(56, 0, 1, 57, DARK_GRAY);
+            $draw_sprite(x * 7 + ox, y * 7, SPRITES, row[x]);
+    }
+    $draw_filled_rect(ox, 56, PUZZLE_W * 7, 1, DARK_GRAY);
+    $draw_filled_rect(PUZZLE_W * 7 + ox, 0, 1, 57, DARK_GRAY);
     
     for(u8 i = 0; i < PUZZLE_W; ++i)
     {
         u8 f = nvert[i];
         if(f == cvert[i]) f += 10;
-        $draw_sprite(i * 7 + 2, 58, NUMBERS, f);
+        $draw_sprite(i * 7 + 2 + ox, 58, NUMBERS, f);
     }
     for(u8 i = 0; i < 8; ++i)
     {
         u8 f = nhorz[i];
         if(f == chorz[i]) f += 10;
-        $draw_sprite(58, i * 7 + 1, NUMBERS, f);
+        $draw_sprite(PUZZLE_W * 7 + 2 + ox, i * 7 + 1, NUMBERS, f);
     }
     
     if($just_pressed(UP_BUTTON   ) && ciy-- == 0) ciy = 7;
@@ -43,20 +48,26 @@ void frame_game()
     
     {
         u8 tcy = ciy * 7;
-        if(cy < tcy)
-            cy += (tcy - cy + 1) / 2;
-        if(cy > tcy)
-            cy -= (cy - tcy + 1) / 2;
+        if(cy != tcy)
+        {
+            if(cy < tcy)
+                cy += (tcy - cy + 1) / 2;
+            if(cy > tcy)
+                cy -= (cy - tcy + 1) / 2;
+        }
     }
     {
         u8 tcx = cix * 7;
-        if(cx < tcx)
-            cx += (tcx - cx + 1) / 2;
-        if(cx > tcx)
-            cx -= (cx - tcx + 1) / 2;
+        if(cx != tcx)
+        {
+            if(cx < tcx)
+                cx += (tcx - cx + 1) / 2;
+            if(cx > tcx)
+                cx -= (cx - tcx + 1) / 2;
+        }
     }
     
-    $draw_sprite(cx, cy, CURSOR, cf);
+    $draw_sprite(cx + ox, cy, CURSOR, cf);
     if(++cf >= 7) cf = 0;
 
     if($just_pressed(A_BUTTON))

@@ -9,6 +9,10 @@ import globals;
 import game;
 import title;
 
+import puzzles;
+import puzzles_easy;
+import puzzles_hard;
+
 void loop()
 {
     if(state == STATE_GAME)
@@ -23,7 +27,10 @@ void main()
     $set_text_color(DARK_GRAY);
     $set_frame_rate(30);
 
-    load_puzzle(PUZZLES[0]);
+    if(!$load())
+        is_easy = true;
+
+    load_next_puzzle();
     state = STATE_TITLE;
 
     while(true)

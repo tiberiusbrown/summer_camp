@@ -1,2 +1,2 @@
-# summer_camp
+# Summer Camp
  

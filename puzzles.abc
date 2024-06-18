@@ -2,8 +2,8 @@ import globals;
 
 struct puzzle_t
 {
-    u8[8] tents;
-    u8[8] trees;
+    u8[12] tents;
+    u8[12] trees;
 };
 
 void load_puzzle(puzzle_t prog& p)
@@ -31,10 +31,20 @@ void load_puzzle(puzzle_t prog& p)
     }
 }
 
-puzzle_t[1] prog PUZZLES =
+void load_next_puzzle()
 {
-    {   { 0x24, 0x01, 0x42, 0x01, 0x88, 0x00, 0xa0, 0x11 },
-        { 0x42, 0x00, 0x85, 0x00, 0x01, 0x88, 0x00, 0xaa } },
-};
-
-constexpr u16 NUM_PUZZLES = len(PUZZLES);
+    if(is_easy)
+    {
+        load_puzzle(PUZZLES_EASY[puzzle_index_easy]);
+        puzzle_index_easy += 1;
+        if(puzzle_index_easy >= len(PUZZLES_EASY))
+            puzzle_index_easy = 0;
+    }
+    else
+    {
+        load_puzzle(PUZZLES_HARD[puzzle_index_hard]);
+        puzzle_index_hard += 1;
+        if(puzzle_index_hard >= len(PUZZLES_HARD))
+            puzzle_index_hard = 0;
+    }
+}
