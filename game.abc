@@ -58,10 +58,9 @@ void update_counts()
 
 void frame_game()
 {
-    u8 ox = 20;
     bool moved = false;
 
-    for(u8 y = 0; y < 8; ++y)
+    for(u8 y = 0; y < ph; ++y)
     {
         u8[13]& row = marks[y];
         for(u8 x = 0; x < pw; ++x)
@@ -69,32 +68,32 @@ void frame_game()
             u8 f = row[x];
             if(f == MARK_BADTENT && (nf & 15) < 10)
                 f = MARK_TENT;
-            $draw_sprite(x * 7 + ox, y * 7, SPRITES, f);
+            $draw_sprite(x * 7 + ox, y * 7 + oy, SPRITES, f);
         }
     }
-    $draw_rect(ox, 0, pw * 7 + 1, 57, DARK_GRAY);
+    $draw_rect(ox, oy, pw * 7 + 1, ph * 7 + 1, DARK_GRAY);
     
     for(u8 i = 0; i < pw; ++i)
     {
         u8 f = nvert[i];
         if(f == cvert[i]) f += 10;
-        $draw_sprite(i * 7 + 2 + ox, 58, NUMBERS, f);
+        $draw_sprite(i * 7 + 2 + ox, ph * 7 + 2 + oy, NUMBERS, f);
     }
-    for(u8 i = 0; i < 8; ++i)
+    for(u8 i = 0; i < ph; ++i)
     {
         u8 f = nhorz[i];
         if(f == chorz[i]) f += 10;
-        $draw_sprite(pw * 7 + 2 + ox, i * 7 + 1, NUMBERS, f);
+        $draw_sprite(pw * 7 + 2 + ox, i * 7 + 1 + oy, NUMBERS, f);
     }
     
     if($just_pressed(UP_BUTTON))
     {
-        if(ciy-- == 0) ciy = 7;
+        if(ciy-- == 0) ciy = ph - 1;
         moved = true;
     }
     if($just_pressed(DOWN_BUTTON))
     {
-        if(ciy++ == 7) ciy = 0;
+        if(++ciy == ph) ciy = 0;
         moved = true;
     }
     if($just_pressed(LEFT_BUTTON))
@@ -104,7 +103,7 @@ void frame_game()
     }
     if($just_pressed(RIGHT_BUTTON))
     {
-        if(cix++ == pw - 1) cix = 0;
+        if(++cix == pw) cix = 0;
         moved = true;
     }
     
@@ -129,7 +128,7 @@ void frame_game()
         }
     }
     
-    $draw_sprite(cx + ox, cy, CURSOR, cf);
+    $draw_sprite(cx + ox, cy + oy, CURSOR, cf);
     if(++cf >= 7) cf = 0;
 
     if($just_pressed(A_BUTTON))

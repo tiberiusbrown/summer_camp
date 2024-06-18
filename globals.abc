@@ -1,5 +1,5 @@
 constexpr font TITLE_FONT = FONT_SCRAWL;
-constexpr font HELP_FONT = FONT_SCRAWL;
+constexpr font HELP_FONT = FONT_VOLTER;
 
 // game state
 u8 state;
@@ -31,13 +31,17 @@ u8[12] nhorz; // actual numbers
 u8[12] nvert;
 u8[12] chorz; // counts
 u8[12] cvert;
-u8[12] tents; // solution
-u8 pw;
+u8 pw; // puzzle dimensions
 u8 ph;
+u8 ox; // game rendering offset
+u8 oy;
 bool puzzle_solved;
 
 // puzzle index
 saved u8 puzzle_type;
-constexpr u8 PUZZLE_EASY = 0;
-constexpr u8 PUZZLE_HARD = 1;
-saved u16[2] puzzle_index;
+constexpr u8 PUZZLE_EASY_6x6  = 0;
+constexpr u8 PUZZLE_EASY_8x8  = 1;
+constexpr u8 PUZZLE_EASY_12x8 = 2;
+constexpr u8 PUZZLE_HARD_8x8  = 3;
+constexpr u8 PUZZLE_HARD_12x8 = 4;
+saved u16[5] puzzle_index;

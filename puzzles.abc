@@ -1,32 +1,37 @@
 import globals;
 
-struct puzzle12x8_t
+struct puzzle_12x8_t
 {
     u8[12] tents;
     u8[12] trees;
 };
 
-struct puzzle8x8_t
+struct puzzle_8x8_t
 {
     u8[8] tents;
     u8[8] trees;
 };
 
-void load_puzzle_12x8(puzzle12x8_t prog& p)
+struct puzzle_6x6_t
 {
-    nhorz = {};
-    nvert = {};
-    chorz = {};
-    cvert = {};
-    marks = {};
+    u8[6] tents;
+    u8[6] trees;
+};
+
+void load_puzzle(u8[] prog& ptents, u8[] prog& ptrees, u8 h)
+{
+    //nhorz = {};
+    //nvert = {};
+    //chorz = {};
+    //cvert = {};
+    //marks = {};
     puzzle_solved = false;
-    tents = p.tents;
-    pw = 12;
-    ph = 8;
+    pw = len(ptents);
+    ph = h;
     for(u8 x = 0; x < pw; ++x)
     {
-        u8 tent = tents[x];
-        u8 tree = p.trees[x];
+        u8 tent = ptents[x];
+        u8 tree = ptrees[x];
         for(u8 m = 1, y = 0; m != 0; m <<= 1)
         {
             if(tent & m)
@@ -36,28 +41,43 @@ void load_puzzle_12x8(puzzle12x8_t prog& p)
                 nhorz[y] += 1;
                 nvert[x] += 1;
             }
-            ++y;
+            if(++y >= ph) break;
         }
     }
 
+    ox = 61 - pw * 7 / 2;
+    oy = 28 - ph * 7 / 2;
+
     $save();
+}
+
+void load_puzzle_12x8(puzzle_12x8_t prog& p)
+{
+    load_puzzle(p.tents, p.trees, 8);
+}
+
+void load_puzzle_8x8(puzzle_8x8_t prog& p)
+{
+    load_puzzle(p.tents, p.trees, 8);
+}
+
+void load_puzzle_6x6(puzzle_6x6_t prog& p)
+{
+    load_puzzle(p.tents, p.trees, 6);
 }
 
 void load_next_puzzle()
 {
     u16& index = puzzle_index[puzzle_type];
-    if(puzzle_type == PUZZLE_EASY)
-    {
-        load_puzzle_12x8(PUZZLES_EASY[index]);
-        index += 1;
-        if(index >= len(PUZZLES_EASY))
-            index = 0;
-    }
-    else
-    {
-        load_puzzle_12x8(PUZZLES_HARD[index]);
-        index += 1;
-        if(index >= len(PUZZLES_HARD))
-            index = 0;
-    }
+    if(puzzle_type == PUZZLE_EASY_6x6)
+        load_puzzle_6x6(PUZZLES_EASY_6x6[index]);
+    else if(puzzle_type == PUZZLE_EASY_8x8)
+        load_puzzle_8x8(PUZZLES_EASY_8x8[index]);
+    else if(puzzle_type == PUZZLE_EASY_12x8)
+        load_puzzle_12x8(PUZZLES_EASY_12x8[index]);
+    else if(puzzle_type == PUZZLE_HARD_8x8)
+        load_puzzle_8x8(PUZZLES_HARD_8x8[index]);
+    else if(puzzle_type == PUZZLE_HARD_12x8)
+        load_puzzle_12x8(PUZZLES_HARD_12x8[index]);
+    index = (index + 1) & 1023;
 }

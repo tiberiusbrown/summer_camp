@@ -14,8 +14,13 @@ import solved;
 import title;
 
 import puzzles;
-import puzzles_easy;
-import puzzles_hard;
+
+import pd_easy_6x6;
+import pd_easy_8x8;
+import pd_easy_12x8;
+
+import pd_hard_8x8;
+import pd_hard_12x8;
 
 void loop()
 {

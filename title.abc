@@ -1,11 +1,8 @@
 import sprites;
 import globals;
 
-import puzzles_easy;
-import puzzles_hard;
-
-char[] prog&[3] prog TITLE_STRINGS = {
-    "Easy 12x8", "Hard 12x8", "Help"
+char[] prog&[6] prog TITLE_STRINGS = {
+    "Help", "Easy 6x6", "Easy 8x8", "Easy 12x8", "Hard 8x8", "Hard 12x8"
 };
 
 void frame_title()
@@ -18,24 +15,24 @@ void frame_title()
         {
             if($load())
             {
-                title_page = 1;
-                if(puzzle_type == PUZZLE_HARD) title_page = 2;
+                title_page = puzzle_type + 2;
             }
             else
             {
                 $init_random_seed();
                 for(u8 i = 0; i < len(puzzle_index); ++i)
                     puzzle_index[i] = $random() & 1023;
-                puzzle_type = PUZZLE_EASY;
-                title_page = 3;
+                puzzle_type = PUZZLE_EASY_12x8;
+                title_page = 1;
             }
         }
     }
     else
     {
+        constexpr u8 N = len(TITLE_STRINGS);
         if($just_pressed(A_BUTTON))
         {
-            if(title_page == 3)
+            if(title_page == 1)
             {
                 state = STATE_HELP;
                 help_page = 0;
@@ -43,19 +40,21 @@ void frame_title()
             else
             {
                 state = STATE_GAME;
-                puzzle_type = title_page - 1;
+                puzzle_type = title_page - 2;
                 load_next_puzzle();
             }
         }
-        if($just_pressed(LEFT_BUTTON ) && --title_page < 1) title_page = 3;
-        if($just_pressed(RIGHT_BUTTON) && ++title_page > 3) title_page = 1;
+        if($just_pressed(LEFT_BUTTON ) && title_page > 1) title_page -= 1;
+        if($just_pressed(RIGHT_BUTTON) && title_page < N) title_page += 1;
 
         constexpr u8 W = 76;
 
         $draw_filled_rect(64 - W / 2, 37, W, 10, LIGHT_GRAY);
         $draw_rect(63 - W / 2, 36, W + 2, 12, BLACK);
-        $draw_sprite(65 - W / 2, 39, ARROWS, 0);
-        $draw_sprite(64 - W / 2 + W - 5, 39, ARROWS, 1);
+        if(title_page > 1)
+            $draw_sprite(65 - W / 2, 39, ARROWS, 0);
+        if(title_page < N)
+            $draw_sprite(64 - W / 2 + W - 5, 39, ARROWS, 1);
 
         char[] prog& str = TITLE_STRINGS[title_page - 1];
         $set_text_font(TITLE_FONT);

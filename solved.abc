@@ -3,12 +3,10 @@ import sprites;
 
 void frame_solved()
 {
-    u8 ox = 20;
-
     u8 tent = MARK_TENT;
     if(puzzle_solved && nf < 40 && (nf & 7) < 4)
         tent = MARK_NOTENT;
-    for(u8 y = 0; y < 8; ++y)
+    for(u8 y = 0; y < ph; ++y)
     {
         u8[13]& row = marks[y];
         for(u8 x = 0; x < pw; ++x)
@@ -16,17 +14,18 @@ void frame_solved()
             u8 t = row[x];
             if(t == MARK_NONE) t = MARK_NOTENT;
             if(t == MARK_TENT) t = tent;
-            $draw_sprite(x * 7 + ox, y * 7, SPRITES, t);
+            $draw_sprite(x * 7 + ox, y * 7 + oy, SPRITES, t);
         }
     }
-    $draw_rect(ox, 0, pw * 7 + 1, 57, DARK_GRAY);
+    $draw_rect(ox, oy, pw * 7 + 1, ph * 7 + 1, DARK_GRAY);
 
     if(puzzle_solved && nf >= 60)
         puzzle_solved = false;
 
     if(!puzzle_solved)
     {
-        $draw_sprite(25, 17, GOODJOB, 0);
+        if((nf & 31) < 24)
+            $draw_sprite(25, 17, GOODJOB, 0);
 
         if($just_pressed(B_BUTTON))
             state = STATE_TITLE;

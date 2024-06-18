@@ -5,12 +5,10 @@ struct help_info_t
 {
     char[] prog& str;
     u8 ox, oy;
-    u8[4][4] pattern;
+    u8[4][8] pattern;
     u8[4] nhorz;
     u8[4] nvert;
-    bool flash_tents;
     bool flash_numbers;
-    bool flash_trees;
 };
 
 help_info_t[6] prog HELP_PAGES =
@@ -23,10 +21,13 @@ help_info_t[6] prog HELP_PAGES =
             { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
             { MARK_NONE, MARK_TREE, MARK_TREE, MARK_NONE },
             { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_NONE },
+            { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
         },
         { 1, 1, 1, 1 },
         { 0, 2, 0, 2 },
-        false, false
     },
     {
         "We need to\nplace tents in\nempty spaces\nso that each\ntent has its\nown tree.",
@@ -36,10 +37,13 @@ help_info_t[6] prog HELP_PAGES =
             { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
             { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
             { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_NONE },
+            { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
         },
         { 11, 11, 11, 11 },
         { 10, 12, 10, 12 },
-        true, false
     },
     {
         "Trees may be\nadjacent to\nmore than one\ntent.",
@@ -49,23 +53,29 @@ help_info_t[6] prog HELP_PAGES =
             { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
             { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
             { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
         },
         { 11, 11, 11, 11 },
         { 10, 12, 10, 12 },
-        false, false, true
     },
     {
-        "However, trees\nmust always be\northogonally\nadjacent to\ntheir own tent.",
+        "However, each\ntree must be\northogonally\nadjacent to\ntheir own tent.",
         94, 15,
         {
             { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
             { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
             { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
             { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
         },
         { 11, 11, 11, 11 },
         { 10, 12, 10, 12 },
-        false, false, true
     },
     {
         "The numbers\nindicate how\nmany tents are\nin each row\nand column.",
@@ -75,10 +85,14 @@ help_info_t[6] prog HELP_PAGES =
             { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
             { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
             { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
         },
         { 11, 11, 11, 11 },
         { 10, 12, 10, 12 },
-        false, true
+        true
     },
     {
         "Multiple tents\nmay not be\nadjacent, even\ndiagonally.",
@@ -86,12 +100,15 @@ help_info_t[6] prog HELP_PAGES =
         {
             { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
             { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
+            { MARK_TENT, MARK_TREE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
             { MARK_BADTENT, MARK_TREE, MARK_TREE, MARK_TENT },
             { MARK_NONE, MARK_BADTENT, MARK_NONE, MARK_NONE },
         },
         { 11, 1, 1, 11 },
         { 0, 2, 10, 12 },
-        false, false
     },
 };
 
@@ -99,15 +116,9 @@ void draw_help_page(
     help_info_t prog& i)
 {
     help_info_t info = i;
-    u8 tent = MARK_TENT;
-    if(info.flash_tents && (nf & 15) < 4)
-        tent = MARK_NONE;
-    u8 badtent = MARK_BADTENT;
-    if((nf & 15) < 10)
-        badtent = MARK_TENT;
-    u8 tree = MARK_TREE;
-    if(info.flash_trees && (nf & 15) < 4)
-        tree = MARK_NONE;
+    u8 n = 0;
+    if((nf & 15) < 8)
+        n = 4;
 
     $set_text_font(HELP_FONT);
     $set_text_color(WHITE);
@@ -117,15 +128,11 @@ void draw_help_page(
     {
         for(u8 c = 0; c < 4; ++c)
         {
-            u8 t = info.pattern[r][c];
-            if(t == MARK_TENT) t = tent;
-            if(t == MARK_TREE) t = tree;
-            if(t == MARK_BADTENT) t = badtent;
             $draw_sprite(
                 c * 7 + info.ox,
                 r * 7 + info.oy,
                 SPRITES,
-                t);
+                info.pattern[r + n][c]);
         }
     }
     if(!info.flash_numbers || (nf & 15) >= 4)
@@ -156,9 +163,11 @@ void frame_help()
     u8 w = $text_width(str);
     $draw_text(128 - w, 63, str);
 
-    if($just_pressed(LEFT_BUTTON ) && help_page-- <= 0)
-        help_page = len(HELP_PAGES) - 1;
-    if(($just_pressed(A_BUTTON) || $just_pressed(RIGHT_BUTTON)) && help_page++ >= len(HELP_PAGES) - 1)
+    if($just_pressed(LEFT_BUTTON ) && help_page > 0)
+        help_page -= 1;
+    if($just_pressed(RIGHT_BUTTON ) && help_page < len(HELP_PAGES) - 1)
+        help_page += 1;
+    if($just_pressed(A_BUTTON) && help_page++ >= len(HELP_PAGES) - 1)
         state = STATE_TITLE;
     if($just_pressed(B_BUTTON))
         state = STATE_TITLE;
