@@ -1,0 +1,27 @@
+constexpr u8 PUZZLE_W = 8;
+
+// game state
+u8 state;
+constexpr u8 STATE_GAME = 0;
+constexpr u8 STATE_TITLE = 1;
+
+// cursor
+u8 cix = 3;
+u8 ciy = 2;
+u8 cx = 21;
+u8 cy = 14;
+u8 cf = 0;
+
+// current puzzle info
+constexpr u8 MARK_NONE = 0;
+constexpr u8 MARK_TREE = 1;
+constexpr u8 MARK_TENT = 2;
+constexpr u8 MARK_NOTENT = 3;
+u8[8][8] marks;
+u8[8] nhorz; // actual numbers
+u8[8] nvert;
+u8[8] chorz; // counts
+u8[8] cvert;
+
+// puzzle index
+saved u16 puzzle_index;

@@ -1,0 +1,81 @@
+import globals;
+import puzzles;
+import sprites;
+
+void update_counts()
+{
+    u8 t = 0;
+    for(u8 x = 0; x < PUZZLE_W; ++x)
+        t += (marks[ciy][x] == MARK_TENT);
+    chorz[ciy] = t;
+
+    t = 0;
+    for(u8 y = 0; y < 8; ++y)
+        t += (marks[y][cix] == MARK_TENT);
+    cvert[cix] = t;
+}
+
+void frame_game()
+{
+    for(u8 y = 0; y < 8; ++y)
+        for(u8 x = 0; x < PUZZLE_W; ++x)
+            $draw_sprite(x * 7, y * 7, SPRITES, marks[y][x]);
+    $draw_filled_rect(0, 56, 56, 1, DARK_GRAY);
+    $draw_filled_rect(56, 0, 1, 57, DARK_GRAY);
+    
+    for(u8 i = 0; i < PUZZLE_W; ++i)
+    {
+        u8 f = nvert[i];
+        if(f == cvert[i]) f += 10;
+        $draw_sprite(i * 7 + 2, 58, NUMBERS, f);
+    }
+    for(u8 i = 0; i < 8; ++i)
+    {
+        u8 f = nhorz[i];
+        if(f == chorz[i]) f += 10;
+        $draw_sprite(58, i * 7 + 1, NUMBERS, f);
+    }
+    
+    if($just_pressed(UP_BUTTON   ) && ciy-- == 0) ciy = 7;
+    if($just_pressed(DOWN_BUTTON ) && ciy++ == 7) ciy = 0;
+    if($just_pressed(LEFT_BUTTON ) && cix-- == 0) cix = 7;
+    if($just_pressed(RIGHT_BUTTON) && cix++ == PUZZLE_W - 1) cix = 0;
+    
+    {
+        u8 tcy = ciy * 7;
+        if(cy < tcy)
+            cy += (tcy - cy + 1) / 2;
+        if(cy > tcy)
+            cy -= (cy - tcy + 1) / 2;
+    }
+    {
+        u8 tcx = cix * 7;
+        if(cx < tcx)
+            cx += (tcx - cx + 1) / 2;
+        if(cx > tcx)
+            cx -= (cx - tcx + 1) / 2;
+    }
+    
+    $draw_sprite(cx, cy, CURSOR, cf);
+    if(++cf >= 7) cf = 0;
+
+    if($just_pressed(A_BUTTON))
+    {
+        u8& r = marks[ciy][cix];
+        u8 t = r;
+        if(t == MARK_TENT) t = MARK_NONE;
+        else if(t != MARK_TREE) t = MARK_TENT;
+        r = t;
+        update_counts();
+    }
+
+    if($just_pressed(B_BUTTON))
+    {
+        u8& r = marks[ciy][cix];
+        u8 t = r;
+        if(t == MARK_NOTENT) t = MARK_NONE;
+        else if(t != MARK_TREE) t = MARK_NOTENT;
+        r = t;
+        update_counts();
+    }
+}

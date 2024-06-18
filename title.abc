@@ -1,0 +1,10 @@
+import sprites;
+import globals;
+
+void frame_title()
+{
+    $draw_sprite(0, 0, TENT, 0);
+
+    if($just_pressed(A_BUTTON))
+        state = STATE_GAME;
+}

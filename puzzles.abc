@@ -1,0 +1,40 @@
+import globals;
+
+struct puzzle_t
+{
+    u8[8] tents;
+    u8[8] trees;
+};
+
+void load_puzzle(puzzle_t prog& p)
+{
+    nhorz = {};
+    nvert = {};
+    chorz = {};
+    cvert = {};
+    marks = {};
+    for(u8 x = 0; x < PUZZLE_W; ++x)
+    {
+        u8 tent = p.tents[x];
+        u8 tree = p.trees[x];
+        for(u8 m = 1, y = 0; m != 0; m <<= 1)
+        {
+            if(tent & m)
+                marks[y][x] = MARK_TREE;
+            if(tree & m)
+            {
+                nhorz[y] += 1;
+                nvert[x] += 1;
+            }
+            ++y;
+        }
+    }
+}
+
+puzzle_t[1] prog PUZZLES =
+{
+    {   { 0x24, 0x01, 0x42, 0x01, 0x88, 0x00, 0xa0, 0x11 },
+        { 0x42, 0x00, 0x85, 0x00, 0x01, 0x88, 0x00, 0xaa } },
+};
+
+constexpr u16 NUM_PUZZLES = len(PUZZLES);
