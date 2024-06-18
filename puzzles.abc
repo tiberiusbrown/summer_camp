@@ -1,21 +1,31 @@
 import globals;
 
-struct puzzle_t
+struct puzzle12x8_t
 {
     u8[12] tents;
     u8[12] trees;
 };
 
-void load_puzzle(puzzle_t prog& p)
+struct puzzle8x8_t
+{
+    u8[8] tents;
+    u8[8] trees;
+};
+
+void load_puzzle_12x8(puzzle12x8_t prog& p)
 {
     nhorz = {};
     nvert = {};
     chorz = {};
     cvert = {};
     marks = {};
-    for(u8 x = 0; x < PUZZLE_W; ++x)
+    puzzle_solved = false;
+    tents = p.tents;
+    pw = 12;
+    ph = 8;
+    for(u8 x = 0; x < pw; ++x)
     {
-        u8 tent = p.tents[x];
+        u8 tent = tents[x];
         u8 tree = p.trees[x];
         for(u8 m = 1, y = 0; m != 0; m <<= 1)
         {
@@ -29,22 +39,25 @@ void load_puzzle(puzzle_t prog& p)
             ++y;
         }
     }
+
+    $save();
 }
 
 void load_next_puzzle()
 {
-    if(is_easy)
+    u16& index = puzzle_index[puzzle_type];
+    if(puzzle_type == PUZZLE_EASY)
     {
-        load_puzzle(PUZZLES_EASY[puzzle_index_easy]);
-        puzzle_index_easy += 1;
-        if(puzzle_index_easy >= len(PUZZLES_EASY))
-            puzzle_index_easy = 0;
+        load_puzzle_12x8(PUZZLES_EASY[index]);
+        index += 1;
+        if(index >= len(PUZZLES_EASY))
+            index = 0;
     }
     else
     {
-        load_puzzle(PUZZLES_HARD[puzzle_index_hard]);
-        puzzle_index_hard += 1;
-        if(puzzle_index_hard >= len(PUZZLES_HARD))
-            puzzle_index_hard = 0;
+        load_puzzle_12x8(PUZZLES_HARD[index]);
+        index += 1;
+        if(index >= len(PUZZLES_HARD))
+            index = 0;
     }
 }

@@ -1,12 +1,16 @@
 #title "Summer Camp"
 #author "Peter Brown"
-#description "Place tents next to trees in this themed puzzle game! Adapted from Simon Tatham's \"Tents\"."
+#description "Assign tents to spaces next to trees in this themed puzzle game! Adapted from Simon Tatham's \"Tents\"."
+#version "1.0"
+#sourceUrl "https://github.com/tiberiusbrown/summer_camp"
 
 #shades "4"
 
 import sprites;
 import globals;
 import game;
+import help;
+import solved;
 import title;
 
 import puzzles;
@@ -19,20 +23,20 @@ void loop()
         frame_game();
     else if(state == STATE_TITLE)
         frame_title();
+    else if(state == STATE_HELP)
+        frame_help();
+    else if(state == STATE_SOLVED)
+        frame_solved();
     nf += 1;
     $display();
 }
 
 void main()
 {
-    $set_text_color(DARK_GRAY);
     $set_frame_rate(20);
 
-    if(!$load())
-        is_easy = true;
-
-    load_next_puzzle();
     state = STATE_TITLE;
+    title_page = 0;
 
     while(true)
         loop();

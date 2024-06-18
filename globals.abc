@@ -1,11 +1,15 @@
-constexpr u8 PUZZLE_W = 12;
+constexpr font TITLE_FONT = FONT_SCRAWL;
+constexpr font HELP_FONT = FONT_SCRAWL;
 
 // game state
 u8 state;
-constexpr u8 STATE_GAME = 0;
-constexpr u8 STATE_TITLE = 1;
+constexpr u8 STATE_GAME   = 0;
+constexpr u8 STATE_TITLE  = 1;
+constexpr u8 STATE_HELP   = 2;
+constexpr u8 STATE_SOLVED = 3;
 u8 nf;
-bool is_easy;
+u8 help_page;
+u8 title_page;
 
 // cursor
 u8 cix = 3;
@@ -13,6 +17,8 @@ u8 ciy = 2;
 u8 cx = 21;
 u8 cy = 14;
 u8 cf = 0;
+bool holding_down_b;
+u8 holding_down_b_mark;
 
 // current puzzle info
 constexpr u8 MARK_NONE = 0;
@@ -25,7 +31,13 @@ u8[12] nhorz; // actual numbers
 u8[12] nvert;
 u8[12] chorz; // counts
 u8[12] cvert;
+u8[12] tents; // solution
+u8 pw;
+u8 ph;
+bool puzzle_solved;
 
 // puzzle index
-saved u16 puzzle_index_easy;
-saved u16 puzzle_index_hard;
+saved u8 puzzle_type;
+constexpr u8 PUZZLE_EASY = 0;
+constexpr u8 PUZZLE_HARD = 1;
+saved u16[2] puzzle_index;

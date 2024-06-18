@@ -5,7 +5,7 @@ import sprites;
 void update_counts()
 {
     u8 t = 0;
-    for(u8 x = 0; x < PUZZLE_W; ++x)
+    for(u8 x = 0; x < pw; ++x)
         t += (marks[ciy][x] == MARK_TENT);
     chorz[ciy] = t;
 
@@ -14,12 +14,20 @@ void update_counts()
         t += (marks[y][cix] == MARK_TENT);
     cvert[cix] = t;
 
+    puzzle_solved = true;
+    for(u8 x = 0; x < pw; ++x)
+        if(chorz[x] != nhorz[x])
+            puzzle_solved = false;
+    for(u8 y = 0; y < 8; ++y)
+        if(cvert[y] != nvert[y])
+            puzzle_solved = false;
+
     // mark bad tents
     for(u8 y = 8; y > 0; --y)
     {
         u8[13]& row0 = marks[y - 1];
         u8[13]& row1 = marks[y];
-        for(i8 x = PUZZLE_W - 1; x >= 0; --x)
+        for(i8 x = pw - 1; x >= 0; --x)
         {
             if(row0[x] < MARK_TENT) continue;
             u8 t = MARK_TENT;
@@ -51,11 +59,12 @@ void update_counts()
 void frame_game()
 {
     u8 ox = 20;
+    bool moved = false;
 
     for(u8 y = 0; y < 8; ++y)
     {
         u8[13]& row = marks[y];
-        for(u8 x = 0; x < PUZZLE_W; ++x)
+        for(u8 x = 0; x < pw; ++x)
         {
             u8 f = row[x];
             if(f == MARK_BADTENT && (nf & 15) < 10)
@@ -63,10 +72,9 @@ void frame_game()
             $draw_sprite(x * 7 + ox, y * 7, SPRITES, f);
         }
     }
-    $draw_filled_rect(ox, 56, PUZZLE_W * 7, 1, DARK_GRAY);
-    $draw_filled_rect(PUZZLE_W * 7 + ox, 0, 1, 57, DARK_GRAY);
+    $draw_rect(ox, 0, pw * 7 + 1, 57, DARK_GRAY);
     
-    for(u8 i = 0; i < PUZZLE_W; ++i)
+    for(u8 i = 0; i < pw; ++i)
     {
         u8 f = nvert[i];
         if(f == cvert[i]) f += 10;
@@ -76,13 +84,29 @@ void frame_game()
     {
         u8 f = nhorz[i];
         if(f == chorz[i]) f += 10;
-        $draw_sprite(PUZZLE_W * 7 + 2 + ox, i * 7 + 1, NUMBERS, f);
+        $draw_sprite(pw * 7 + 2 + ox, i * 7 + 1, NUMBERS, f);
     }
     
-    if($just_pressed(UP_BUTTON   ) && ciy-- == 0) ciy = 7;
-    if($just_pressed(DOWN_BUTTON ) && ciy++ == 7) ciy = 0;
-    if($just_pressed(LEFT_BUTTON ) && cix-- == 0) cix = 7;
-    if($just_pressed(RIGHT_BUTTON) && cix++ == PUZZLE_W - 1) cix = 0;
+    if($just_pressed(UP_BUTTON))
+    {
+        if(ciy-- == 0) ciy = 7;
+        moved = true;
+    }
+    if($just_pressed(DOWN_BUTTON))
+    {
+        if(ciy++ == 7) ciy = 0;
+        moved = true;
+    }
+    if($just_pressed(LEFT_BUTTON))
+    {
+        if(cix-- == 0) cix = pw - 1;
+        moved = true;
+    }
+    if($just_pressed(RIGHT_BUTTON))
+    {
+        if(cix++ == pw - 1) cix = 0;
+        moved = true;
+    }
     
     {
         u8 tcy = ciy * 7;
@@ -122,9 +146,29 @@ void frame_game()
     {
         u8& r = marks[ciy][cix];
         u8 t = r;
-        if(t == MARK_NOTENT) t = MARK_NONE;
+        holding_down_b = true;
+        holding_down_b_mark = MARK_NOTENT;
+        if(t == MARK_NOTENT) holding_down_b_mark = t = MARK_NONE;
         else if(t != MARK_TREE) t = MARK_NOTENT;
         r = t;
         update_counts();
+    }
+    else if(holding_down_b && moved)
+    {
+        u8& r = marks[ciy][cix];
+        u8 t = r;
+        if(t == MARK_NONE || t == MARK_NOTENT)
+            t = holding_down_b_mark;
+        r = t;
+        update_counts();
+    }
+
+    if(!$pressed(B_BUTTON))
+        holding_down_b = false;
+
+    if(puzzle_solved)
+    {
+        state = STATE_SOLVED;
+        nf = 0;
     }
 }
