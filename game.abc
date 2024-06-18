@@ -13,6 +13,39 @@ void update_counts()
     for(u8 y = 0; y < 8; ++y)
         t += (marks[y][cix] == MARK_TENT);
     cvert[cix] = t;
+
+    // mark bad tents
+    for(u8 y = 8; y > 0; --y)
+    {
+        u8[13]& row0 = marks[y - 1];
+        u8[13]& row1 = marks[y];
+        for(i8 x = PUZZLE_W - 1; x >= 0; --x)
+        {
+            if(row0[x] < MARK_TENT) continue;
+            u8 t = MARK_TENT;
+            if(row0[x + 1] >= MARK_TENT)
+            {
+                row0[x + 1] = MARK_BADTENT;
+                t = MARK_BADTENT;
+            }
+            if(row1[x] >= MARK_TENT)
+            {
+                row1[x] = MARK_BADTENT;
+                t = MARK_BADTENT;
+            }
+            if(row1[x + 1] >= MARK_TENT)
+            {
+                row1[x + 1] = MARK_BADTENT;
+                t = MARK_BADTENT;
+            }
+            if(x > 0 && row1[x - 1] >= MARK_TENT)
+            {
+                row1[x - 1] = MARK_BADTENT;
+                t = MARK_BADTENT;
+            }
+            row0[x] = t;
+        }
+    }
 }
 
 void frame_game()
@@ -21,9 +54,14 @@ void frame_game()
 
     for(u8 y = 0; y < 8; ++y)
     {
-        u8[12]& row = marks[y];
+        u8[13]& row = marks[y];
         for(u8 x = 0; x < PUZZLE_W; ++x)
-            $draw_sprite(x * 7 + ox, y * 7, SPRITES, row[x]);
+        {
+            u8 f = row[x];
+            if(f == MARK_BADTENT && (nf & 15) < 10)
+                f = MARK_TENT;
+            $draw_sprite(x * 7 + ox, y * 7, SPRITES, f);
+        }
     }
     $draw_filled_rect(ox, 56, PUZZLE_W * 7, 1, DARK_GRAY);
     $draw_filled_rect(PUZZLE_W * 7 + ox, 0, 1, 57, DARK_GRAY);
@@ -74,7 +112,7 @@ void frame_game()
     {
         u8& r = marks[ciy][cix];
         u8 t = r;
-        if(t == MARK_TENT) t = MARK_NONE;
+        if(t >= MARK_TENT) t = MARK_NONE;
         else if(t != MARK_TREE) t = MARK_TENT;
         r = t;
         update_counts();

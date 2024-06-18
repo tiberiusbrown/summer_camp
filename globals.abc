@@ -4,6 +4,7 @@ constexpr u8 PUZZLE_W = 12;
 u8 state;
 constexpr u8 STATE_GAME = 0;
 constexpr u8 STATE_TITLE = 1;
+u8 nf;
 bool is_easy;
 
 // cursor
@@ -16,9 +17,10 @@ u8 cf = 0;
 // current puzzle info
 constexpr u8 MARK_NONE = 0;
 constexpr u8 MARK_TREE = 1;
-constexpr u8 MARK_TENT = 2;
-constexpr u8 MARK_NOTENT = 3;
-u8[12][8] marks;
+constexpr u8 MARK_NOTENT = 2;
+constexpr u8 MARK_TENT = 3;
+constexpr u8 MARK_BADTENT = 4;
+u8[13][9] marks;
 u8[12] nhorz; // actual numbers
 u8[12] nvert;
 u8[12] chorz; // counts

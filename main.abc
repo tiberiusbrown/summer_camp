@@ -19,13 +19,14 @@ void loop()
         frame_game();
     else if(state == STATE_TITLE)
         frame_title();
+    nf += 1;
     $display();
 }
 
 void main()
 {
     $set_text_color(DARK_GRAY);
-    $set_frame_rate(30);
+    $set_frame_rate(20);
 
     if(!$load())
         is_easy = true;
