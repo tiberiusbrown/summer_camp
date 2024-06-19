@@ -4,14 +4,6 @@ import sprites;
 
 void update_counts()
 {
-    puzzle_solved = true;
-    for(u8 x = 0; x < pw; ++x)
-        if(chorz[x] != nhorz[x])
-            puzzle_solved = false;
-    for(u8 y = 0; y < 8; ++y)
-        if(cvert[y] != nvert[y])
-            puzzle_solved = false;
-
     // mark bad tents
     for(u8 y = 8; y > 0; --y)
     {
@@ -44,7 +36,7 @@ void update_counts()
             row0[x] = t;
         }
     }
-    
+
     {
         u8 t = 0;
         for(u8 x = 0; x < pw; ++x)
@@ -56,6 +48,14 @@ void update_counts()
             t += (marks[y][cix] == MARK_TENT);
         cvert[cix] = t;
     }
+
+    puzzle_solved = true;
+    for(u8 x = 0; x < pw; ++x)
+        if(chorz[x] != nhorz[x])
+            puzzle_solved = false;
+    for(u8 y = 0; y < 8; ++y)
+        if(cvert[y] != nvert[y])
+            puzzle_solved = false;
 }
 
 void frame_game()
