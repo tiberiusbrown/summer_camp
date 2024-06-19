@@ -40,12 +40,12 @@ void update_counts()
     {
         u8 t = 0;
         for(u8 x = 0; x < pw; ++x)
-            t += (marks[ciy][x] == MARK_TENT);
+            t += (marks[ciy][x] >= MARK_TENT);
         chorz[ciy] = t;
 
         t = 0;
         for(u8 y = 0; y < 8; ++y)
-            t += (marks[y][cix] == MARK_TENT);
+            t += (marks[y][cix] >= MARK_TENT);
         cvert[cix] = t;
     }
 
