@@ -34,6 +34,7 @@ u8[12] nhorz; // actual numbers
 u8[12] nvert;
 u8[12] chorz; // counts
 u8[12] cvert;
+u8[12] tents; // solution
 u8 pw; // puzzle dimensions
 u8 ph;
 u8 ox; // game rendering offset

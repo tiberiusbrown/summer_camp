@@ -2,20 +2,20 @@ import globals;
 
 struct puzzle_12x8_t
 {
-    u8[12] tents;
     u8[12] trees;
+    u8[12] tents;
 };
 
 struct puzzle_8x8_t
 {
-    u8[8] tents;
     u8[8] trees;
+    u8[8] tents;
 };
 
 struct puzzle_6x6_t
 {
-    u8[6] tents;
     u8[6] trees;
+    u8[6] tents;
 };
 
 void load_puzzle(u8[] prog& ptents, u8[] prog& ptrees, u8 h)
@@ -28,15 +28,17 @@ void load_puzzle(u8[] prog& ptents, u8[] prog& ptrees, u8 h)
     puzzle_solved = false;
     pw = len(ptents);
     ph = h;
+    for(u8 i = 0; i < pw; ++i)
+        tents[i] = ptents[i];
     for(u8 x = 0; x < pw; ++x)
     {
-        u8 tent = ptents[x];
+        u8 tent = tents[x];
         u8 tree = ptrees[x];
         for(u8 m = 1, y = 0; m != 0; m <<= 1)
         {
-            if(tent & m)
-                marks[y][x] = MARK_TREE;
             if(tree & m)
+                marks[y][x] = MARK_TREE;
+            if(tent & m)
             {
                 nhorz[y] += 1;
                 nvert[x] += 1;
