@@ -44,9 +44,7 @@ void main()
     $set_frame_rate(20);
 
     state = STATE_TITLE;
-    title_page = 1;
-
-    //state = STATE_PAUSE;
+    title_page = 0;
 
     while(true)
         loop();
