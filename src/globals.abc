@@ -7,18 +7,21 @@ constexpr u8 STATE_GAME   = 0;
 constexpr u8 STATE_TITLE  = 1;
 constexpr u8 STATE_HELP   = 2;
 constexpr u8 STATE_SOLVED = 3;
+constexpr u8 STATE_PAUSE  = 4;
 u8 nf;
 u8 help_page;
 u8 title_page;
+u8 pause_choice;
 
 // cursor
-u8 cix = 3;
-u8 ciy = 2;
-u8 cx = 21;
-u8 cy = 14;
-u8 cf = 0;
+u8 cix; // cursor index position
+u8 ciy;
+u8 cx;  // cursor pixel position
+u8 cy;
+u8 cf;
 bool holding_down_b;
 u8 holding_down_b_mark;
+u32 pressed_b_time;
 
 // current puzzle info
 constexpr u8 MARK_NONE = 0;

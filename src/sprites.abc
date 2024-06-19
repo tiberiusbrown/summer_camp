@@ -1,14 +1,15 @@
-constexpr sprites TENT = sprites{ "tent.png" };
+constexpr sprites TITLE_IMG = sprites{ "tent.png" };
 constexpr sprites GOODJOB = sprites{ "goodjob.png" };
+constexpr sprites BUTTONS = sprites{ 44x24 "buttons.png" };
 
 constexpr sprites ARROWS = sprites{
     4x5
 
-    --1.  .1--
-    -1..  ..1-
-    1...  ...1
-    -1..  ..1-
-    --1.  .1--
+    --1X  X1--
+    -1XX  XX1-
+    1XXX  XXX1
+    -1XX  XX1-
+    --1X  X1--
 };
 
 constexpr sprites SPRITES = sprites{

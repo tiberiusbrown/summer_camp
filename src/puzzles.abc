@@ -20,11 +20,11 @@ struct puzzle_6x6_t
 
 void load_puzzle(u8[] prog& ptents, u8[] prog& ptrees, u8 h)
 {
-    //nhorz = {};
-    //nvert = {};
-    //chorz = {};
-    //cvert = {};
-    //marks = {};
+    nhorz = {};
+    nvert = {};
+    chorz = {};
+    cvert = {};
+    marks = {};
     puzzle_solved = false;
     pw = len(ptents);
     ph = h;
@@ -47,6 +47,11 @@ void load_puzzle(u8[] prog& ptents, u8[] prog& ptrees, u8 h)
 
     ox = 61 - pw * 7 / 2;
     oy = 28 - ph * 7 / 2;
+
+    cix = pw / 2;
+    ciy = ph / 2;
+    cx = cix * 7;
+    cy = ciy * 7;
 
     $save();
 }

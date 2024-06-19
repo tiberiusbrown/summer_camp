@@ -4,16 +4,6 @@ import sprites;
 
 void update_counts()
 {
-    u8 t = 0;
-    for(u8 x = 0; x < pw; ++x)
-        t += (marks[ciy][x] == MARK_TENT);
-    chorz[ciy] = t;
-
-    t = 0;
-    for(u8 y = 0; y < 8; ++y)
-        t += (marks[y][cix] == MARK_TENT);
-    cvert[cix] = t;
-
     puzzle_solved = true;
     for(u8 x = 0; x < pw; ++x)
         if(chorz[x] != nhorz[x])
@@ -53,6 +43,18 @@ void update_counts()
             }
             row0[x] = t;
         }
+    }
+    
+    {
+        u8 t = 0;
+        for(u8 x = 0; x < pw; ++x)
+            t += (marks[ciy][x] == MARK_TENT);
+        chorz[ciy] = t;
+
+        t = 0;
+        for(u8 y = 0; y < 8; ++y)
+            t += (marks[y][cix] == MARK_TENT);
+        cvert[cix] = t;
     }
 }
 
@@ -151,6 +153,12 @@ void frame_game()
         else if(t != MARK_TREE) t = MARK_NOTENT;
         r = t;
         update_counts();
+        if(u32($millis() - pressed_b_time) < 350)
+        {
+            pause_choice = 0;
+            state = STATE_PAUSE;
+        }
+        pressed_b_time = $millis();
     }
     else if(holding_down_b && moved)
     {
@@ -164,6 +172,9 @@ void frame_game()
 
     if(!$pressed(B_BUTTON))
         holding_down_b = false;
+
+    if(moved)
+        pressed_b_time = 0;
 
     if(puzzle_solved)
     {

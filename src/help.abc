@@ -120,7 +120,6 @@ void draw_help_page(
     if((nf & 15) < 8)
         n = 4;
 
-    $set_text_font(HELP_FONT);
     $set_text_color(WHITE);
     $draw_text(0, 10, info.str);
 
@@ -156,18 +155,56 @@ void draw_help_page(
 
 void frame_help()
 {
-    draw_help_page(HELP_PAGES[help_page]);
+    constexpr u8 N = len(HELP_PAGES) + 4;
+    $set_text_font(HELP_FONT);
 
-    char[3] str;
-    $format(str, "%u/%u", help_page + 1, len(HELP_PAGES));
+    if(help_page < 6)
+        draw_help_page(HELP_PAGES[help_page]);
+    else if(help_page == 6)
+    {
+        $draw_text(0, 10, "Use the arrow buttons\nto move the cursor.");
+        u8 f = 1;
+        if((nf & 15) < 4) f = 0;
+        $draw_sprite(42, 40, BUTTONS, f);
+    }
+    else if(help_page == 7)
+    {
+        $draw_text(0, 10, "Press the A button to\nplace or remove a tent.");
+        u8 f = 2;
+        if((nf & 15) < 4) f = 0;
+        $draw_sprite(42, 40, BUTTONS, f);
+    }
+    else if(help_page == 8)
+    {
+        $draw_text(0, 10, "Press the B button to\nmark a space where you\nknow there is no tent.");
+        u8 f = 3;
+        if((nf & 15) < 4) f = 0;
+        $draw_sprite(42, 40, BUTTONS, f);
+    }
+    else if(help_page == 9)
+    {
+        $draw_text(0, 10, "Press the B button\ntwice quickly to pause\nor quit the current\npuzzle.");
+        u8 f = 3;
+        if((nf & 15) < 4) f = 0;
+        $draw_sprite(42, 40, BUTTONS, f);
+    }
+
+    char[5] str;
+    $format(str, "%u/%u", help_page + 1, N);
     u8 w = $text_width(str);
     $draw_text(128 - w, 63, str);
 
     if($just_pressed(LEFT_BUTTON ) && help_page > 0)
+    {
+        nf = 0;
         help_page -= 1;
-    if($just_pressed(RIGHT_BUTTON ) && help_page < len(HELP_PAGES) - 1)
+    }
+    if($just_pressed(RIGHT_BUTTON ) && help_page < N - 1)
+    {
+        nf = 0;
         help_page += 1;
-    if($just_pressed(A_BUTTON) && help_page++ >= len(HELP_PAGES) - 1)
+    }
+    if($just_pressed(A_BUTTON) && help_page++ >= N - 1)
         state = STATE_TITLE;
     if($just_pressed(B_BUTTON))
         state = STATE_TITLE;
