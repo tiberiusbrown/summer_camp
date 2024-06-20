@@ -5,11 +5,11 @@ void frame_pause()
 {
     $draw_sprite(0, 0, TITLE_IMG, 0);
 
-    constexpr u8 W = 46;
-    constexpr u8 H = 20;
+    constexpr u8 W = 60;
+    constexpr u8 H = 29;
 
-    $draw_filled_rect(64 - W / 2, 37, W, H, BLACK);
-    $draw_rect(63 - W / 2, 36, W + 2, H + 2, DARK_GRAY);
+    $draw_filled_rect(64 - W / 2, 33, W, H, BLACK);
+    $draw_rect(63 - W / 2, 32, W + 2, H + 2, DARK_GRAY);
 
     $set_text_font(TITLE_FONT);
     
@@ -17,20 +17,27 @@ void frame_pause()
         $set_text_color(WHITE);
     else
         $set_text_color(DARK_GRAY);
-    $draw_text(42, 45, "Resume");
+    $draw_text(42, 41, "Resume");
     
     if(pause_choice == 1)
         $set_text_color(WHITE);
     else
         $set_text_color(DARK_GRAY);
-    $draw_text(51, 54, "Quit");
+    $draw_text(35, 50, "New Game");
+    
+    if(pause_choice == 2)
+        $set_text_color(WHITE);
+    else
+        $set_text_color(DARK_GRAY);
+    $draw_text(51, 59, "Quit");
 
-    if($just_pressed(UP_BUTTON  )) pause_choice = 0;
-    if($just_pressed(DOWN_BUTTON)) pause_choice = 1;
+    if($just_pressed(UP_BUTTON  ) && pause_choice > 0) pause_choice -= 1;
+    if($just_pressed(DOWN_BUTTON) && pause_choice < 2) pause_choice += 1;
     if($just_pressed(A_BUTTON))
     {
-        if(pause_choice == 0) state = STATE_GAME;
-        else                  state = STATE_TITLE;
+        if(pause_choice == 1) load_next_puzzle();
+        if(pause_choice <= 1) state = STATE_GAME;
+        if(pause_choice == 2) state = STATE_TITLE;
     }
     if($just_pressed(B_BUTTON)) state = STATE_GAME;
 }
