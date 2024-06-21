@@ -14,7 +14,7 @@ struct help_info_t
 help_info_t[6] prog HELP_PAGES =
 {
     {
-        "Welcome to\nsummer camp!\nWe have many\ncampers to\narrange this\nyear.",
+        "Welcome to\nsummer camp!\nWe have many\ncampsites to\narrange this\nyear.",
         94, 15,
         {
             { MARK_NONE, MARK_NONE, MARK_TREE, MARK_NONE },
@@ -30,55 +30,7 @@ help_info_t[6] prog HELP_PAGES =
         { 0, 2, 0, 2 },
     },
     {
-        "We need to\nplace tents in\nempty spaces\nso that each\ntent has its\nown tree.",
-        94, 15,
-        {
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
-            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_NONE },
-            { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
-        },
-        { 11, 11, 11, 11 },
-        { 10, 12, 10, 12 },
-    },
-    {
-        "Trees may be\nadjacent to\nmore than one\ntent.",
-        94, 15,
-        {
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
-            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
-        },
-        { 11, 11, 11, 11 },
-        { 10, 12, 10, 12 },
-    },
-    {
-        "However, each\ntree must be\northogonally\nadjacent to\ntheir own tent.",
-        94, 15,
-        {
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
-            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
-            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
-            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
-        },
-        { 11, 11, 11, 11 },
-        { 10, 12, 10, 12 },
-    },
-    {
-        "The numbers\nindicate how\nmany tents are\nin each row\nand column.",
+        "Place tents so\nthat the amount\nin each row and\ncolumn matches\nthe number.",
         94, 15,
         {
             { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
@@ -95,7 +47,7 @@ help_info_t[6] prog HELP_PAGES =
         true
     },
     {
-        "Multiple tents\nmay not be\nadjacent, even\ndiagonally.",
+        "Two tents may\nnot be next to\neach other,\neven diagonally.",
         94, 15,
         {
             { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
@@ -109,6 +61,54 @@ help_info_t[6] prog HELP_PAGES =
         },
         { 11, 1, 1, 11 },
         { 0, 2, 10, 12 },
+    },
+    {
+        "Each tent must\nbe paired with\nits own tree,\nand each tree\nwith its own\ntent.",
+        94, 15,
+        {
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
+        },
+        { 11, 11, 11, 11 },
+        { 10, 12, 10, 12 },
+    },
+    {
+        "Tents must be\nnext to their\ntree horizontally\nor vertically.",
+        94, 15,
+        {
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_NONE, MARK_NONE, MARK_NONE },
+        },
+        { 11, 11, 11, 11 },
+        { 10, 12, 10, 12 },
+    },
+    {
+        "Tents may be\nnext to trees\nother than their\nown, and trees\nmay be next to\nother tents.",
+        94, 15,
+        {
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_TREE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_TREE, MARK_NONE, MARK_NONE, MARK_NONE },
+            { MARK_NONE, MARK_NONE, MARK_TREE, MARK_TENT },
+            { MARK_NONE, MARK_TENT, MARK_NONE, MARK_NONE },
+        },
+        { 11, 11, 11, 11 },
+        { 10, 12, 10, 12 },
     },
 };
 
